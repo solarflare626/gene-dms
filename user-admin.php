@@ -1,7 +1,11 @@
 <?php
 //  include 'server.php';
  require_once 'core/init.php';
- 
+ include 'guards/authenticated.php';
+ include 'guards/admin.php';
+
+ $active_nav = "user";
+ $user = new User();
 ?>
 <!doctype html>
 <html lang="en">
@@ -37,48 +41,8 @@
 <body>
 
 <div class="wrapper">
-	<div class="sidebar" data-background-color="white" data-active-color="danger">
 
-    <!--
-		Tip 1: you can change the color of the sidebar's background using: data-background-color="white | black"
-		Tip 2: you can change the color of the active button using the data-active-color="primary | info | success | warning | danger"
-	-->
-
-    	<div class="sidebar-wrapper">
-            <div class="logo">
-                <a href="dashboard-admin.html" class="simple-text">
-                    DAMs
-                </a>
-            </div>
-
-            <ul class="nav">
-                <li>
-                    <a href="dashboard-admin.php">
-                        <i class="ti-dashboard"></i>
-                        <p>Dashboard</p>
-                    </a>
-                </li>
-				<li>
-                    <a href="add-indicator.php">
-                        <i class="ti-plus"></i>
-                        <p>Add Indicator</p>
-                    </a>
-                </li>
-				<li>
-                    <a href="metrics.php">
-                        <i class="ti-notepad"></i>
-                        <p>Metrics</p>
-                    </a>
-                </li>
-                <li class="active">
-                    <a href="user-admin.php">
-                        <i class="ti-user"></i>
-                        <p>User Profile</p>
-                    </a>
-                </li>
-            </ul>
-    	</div>
-    </div>
+    <?php include 'includes/admin-sidebar.php' ?>
 
     <div class="main-panel">
 		<nav class="navbar navbar-default">

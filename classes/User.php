@@ -3,20 +3,23 @@
  * Created by Chris on 9/29/2014 3:57 PM.
  */
 
-class User {
-    private $_db,
-            $_data,
-            $_sessionName,
-            $_cookieName,
-            $isLoggedIn;
+class User extends BaseModel{
+    protected 
+            $_sessionName = null,
+            $_cookieName = null,
+            $_table = "users",
+            $_className = "User",
+            $isLoggedIn = false;
 
     public function __construct($user = null) {
         $this->_db = DB::getInstance();
         $this->_sessionName = Config::get('sessions/session_name');
         $this->_cookieName = Config::get('remember/cookie_name');
+        
 
         if(!$user) {
             if(Session::exists($this->_sessionName)) {
+                
                 $user = Session::get($this->_sessionName);
 
                 if($this->find($user)) {
@@ -25,10 +28,14 @@ class User {
             }else{
                 $this->isLoggedIn = false;
             }
-        } else {
-            $this->find($user);
+        } else if(is_object($user)) {
+            $this->_data = $user;
+        }else{
+            return parent::__construct($user);
         }
+        
     }
+    
 
     public function create($fields = array()) {
         if(!$this->_db->insert('users', $fields)) {

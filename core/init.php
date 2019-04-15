@@ -33,6 +33,7 @@ require_once 'functions/sanitize.php';
 // InitDB::initialize();
 #disabled since we are using different authentication method
 if(Cookie::exists(Config::get('remember/cookie_name')) && !Session::exists(Config::get('sessions/session_name'))) {
+    
     $hash = Cookie::get(Config::get('remember/cookie_name'));
     $hashCheck = DB::getInstance()->get('users_session', array('hash', '=', $hash));
 

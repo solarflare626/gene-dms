@@ -56,25 +56,31 @@ class InitDB{
         #user_session
         $db->query("
             CREATE TABLE IF NOT EXISTS `users_session` (
-                `id` int(11) NOT NULL,
+                `id` int(11) NOT NULL AUTO_INCREMENT,
                 `user_id` int(11) NOT NULL,
-                `hash` varchar(64) NOT NULL
+                `hash` varchar(64) NOT NULL,
+                PRIMARY KEY (`id`)
             )
         ");
         
 
         #requests
-        $db->query("
+
+        try {
+            $db->query("
             CREATE TABLE IF NOT EXISTS `requests` (
-                `id` int(11) NOT AUTO_INCREMENT,
+                `id` int(11) NOT NULL AUTO_INCREMENT,
                 `user_id` int(11) NOT NULL,
-                `title` varchar(255),
+                `subject` varchar(255),
                 `message` longtext,
-                `created_at` datetime NOT NULL,
-                `deleted_at` datetime NOT NULL,
+                `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
+                `deleted_at` datetime DEFAULT   NULL,
                 PRIMARY KEY (`id`)
             )
         ");
+        }catch(Exception $e){
+            die($e->getMessage());
+        }
 
         #notifications
         $db->query("
@@ -83,9 +89,9 @@ class InitDB{
                 `user_id` int(11) NOT NULL,
                 `type` varchar(255),
                 `type_id` int(11),
-                `is_active` boolean,
-                `created_at` datetime NOT NULL,
-                `deleted_at` datetime NOT NULL,
+                `is_active` boolean DEFAULT 0,
+                `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
+                `deleted_at` datetime DEFAULT   NULL,
                 PRIMARY KEY (`id`)
             )
         ");
@@ -97,8 +103,8 @@ class InitDB{
             CREATE TABLE IF NOT EXISTS `indicators` (
                 `id` int(11) NOT NULL AUTO_INCREMENT,
                 `name` varchar(255),
-                `created_at` datetime,
-                `deleted_at` datetime,
+                `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
+                `deleted_at` datetime DEFAULT   NULL,
                 PRIMARY KEY (`id`)
             )
         ");
@@ -109,8 +115,8 @@ class InitDB{
                 `id` int(11) NOT NULL AUTO_INCREMENT,
                 `name` varchar(255),
                 `indicator_id` int(11),
-                `created_at` datetime,
-                `deleted_at` datetime,
+                `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
+                `deleted_at` datetime DEFAULT   NULL,
                 PRIMARY KEY (`id`)
             )
         ");
@@ -121,8 +127,8 @@ class InitDB{
                 `id` int(11) NOT NULL AUTO_INCREMENT,
                 `metric` longtext,
                 `form_id` int(11),
-                `created_at` datetime,
-                `deleted_at` datetime,
+                `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
+                `deleted_at` datetime DEFAULT   NULL,
                 PRIMARY KEY (`id`)
             )
         ");
@@ -134,8 +140,21 @@ class InitDB{
                 `request_id` int(11),
                 `form_id` int(11),
                 `is_submitted` boolean,
-                `created_at` datetime,
-                `deleted_at` datetime,
+                `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
+                `deleted_at` datetime DEFAULT   NULL,
+                PRIMARY KEY (`id`)
+            )
+        ");
+
+        #request_forms
+        $db->query("
+            CREATE TABLE IF NOT EXISTS `request_form_metric_answers` (
+                `id` int(11) NOT NULL AUTO_INCREMENT,
+                `metric_id` int(11),
+                `request_form_id` int(11),
+                `answer` int(11),
+                `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
+                `deleted_at` datetime DEFAULT   NULL,
                 PRIMARY KEY (`id`)
             )
         ");

@@ -2,8 +2,10 @@
 class BaseModel {
     protected $_db,
             $_data,
-            $_table = "base";
+            $_table = "base",
+            $_className = "BaseModel";
 
+    
     
     public function table(){
         return $this->_table;
@@ -18,18 +20,17 @@ class BaseModel {
         }
     }
 
-    public function fetchAll(){
-        $db = DB::getInstance();
+    public function fetchAll($where = null){
+        // $db = DB::getInstance();
         $results = [];
 
         $table = $this->_table;
         
-        // die("$table");
-        if(!$db->query("SELECT * FROM $table")->error()){
-            $r = $db->results();
+        if(!$this->_db->get($table,$where)->error()){
+            $r = $this->_db->results();
 
             foreach ($r as $index => $value) {
-                array_push($results, new self($value));
+                array_push($results, new $this->_className($value));
             }
         }
 
@@ -37,14 +38,27 @@ class BaseModel {
     }
 
     public function create($fields = array()) {
+        
         if(!$this->_db->insert($this->_table, $fields)) {
-            throw new Exception('Sorry, there was a problem creating your account;');
+            echo("error");
+            throw new Exception("Sorry, there was a problem inserting into $this->_table");
+        }else{
+            $id = $this->_db->lastInsertId();
+            $this->find($id);
+            return true;
         }
+        return false;
     }
 
-    public function delete($where = array()) {
+    public function delete($where = null) {
+        if($where == null && $this->_data->id){
+            $where = array( "id","=",$this->_data->id );
+        }else if(!is_array($where)){
+            throw new Exception("Sorry, there was a problem deleting from $this->_table ");
+            return false;
+        }
         if(!$this->_db->delete($this->_table, $where)) {
-            throw new Exception('Sorry, there was a problem creating your account;');
+            throw new Exception("Sorry, there was a problem deleting from $this->_table ");
         }else{
             self::destroy($this);
             return true;
@@ -58,13 +72,12 @@ class BaseModel {
     }
 
     public function update($fields = array(), $id = null) {
-        
+        $id = $id == null ? $this->_data->id : $id;
         if(!$this->_db->update($this->_table, $id, $fields)) {
-            throw new Exception('There was a problem updating');
+            throw new Exception("Sorry, there was a problem updating from $this->_table ");
+            return false;
         }else{
-            foreach ($fields as $key => $value) {
-                $this->_data[$key] = $value;
-            }
+            $this->find($id);
         }
         return true;
     }

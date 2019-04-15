@@ -4,6 +4,7 @@
  include 'guards/admin.php';
 
  $indicators = (new Indicator)->fetchAll();
+ $active_nav = "indicator";
 ?>
 <!doctype html>
 <html lang="en">
@@ -60,45 +61,8 @@
 <body>
 
 <div class="wrapper">
-    <div class="sidebar" data-background-color="white" data-active-color="danger">
 
-    	<div class="sidebar-wrapper">
-            <div class="logo">
-                <a href="" class="simple-text">
-                    DAMs
-                </a>
-            </div>
-
-            <ul class="nav">
-                <li>
-                    <a href="dashboard-admin.php">
-                        <i class="ti-dashboard"></i>
-                        <p>Dashboard</p>
-                    </a>
-                </li>
-				<li class="active">
-                    <a href="add-indicator.php">
-                        <i class="ti-plus"></i>
-                        <p>Add Indicator</p>
-                    </a>
-                </li>
-				<li>
-                    <a href="metrics.php">
-                        <i class="ti-notepad"></i>
-                        <p>Metrics</p>
-                    </a>
-                </li>
-                <li>
-                    <a href="user-admin.html">
-                        <i class="ti-user"></i>
-                        <p>User Profile</p>
-                    </a>
-                </li>
-
-          		
-            </ul>
-    	</div>
-    </div>
+    <?php include 'includes/admin-sidebar.php' ?>
 
 <div class="main-panel">
         <nav class="navbar navbar-default">
@@ -129,7 +93,7 @@
                 <div class="col-md-12">
                     <div class="page-header clearfix">
                         <h2 class="pull-left">Indicator Details</h2>
-                        <a href="create.php" class="btn btn-success pull-right">Add New Indicator</a>
+                        <a href="create-indicator.php" class="btn btn-success pull-right">Add New Indicator</a>
                     </div>
                     <?php
                         if (count($indicators) > 0) {
@@ -152,7 +116,6 @@
                                 echo "<a href='delete-indicator.php?id=". $row->id ."' title='Delete Record' data-toggle='tooltip'><span class='glyphicon glyphicon-trash'></span></a>";
                                 echo "</td>";
                                 echo "</tr>";
-
                             }
                             echo "</tbody>";
                             echo "</table>";
@@ -160,50 +123,6 @@
                             echo "<p class='lead'><em>No records were found.</em></p>";
                         }
                         
-                    ?>
-
-                    
-                    <?php
-                    // // Include db file
-                    // require_once "db.php";
-                    
-                    // // Attempt select query execution
-                    // $sql = "SELECT * FROM indicators";
-                    
-                    // if ($result = mysqli_query($con, $sql)) {
-                    //     if (mysqli_num_rows($result) > 0) {
-                    //         echo "<table class='table table-bordered table-striped'>";
-                    //         echo "<thead>";
-                    //         echo "<tr>";
-                    //         echo "<th>ID</th>";
-                    //         echo "<th>Indicator Name</th>";
-                    //         echo "<th>Action</th>";
-                    //         echo "</tr>";
-                    //         echo "</thead>";
-                    //         echo "<tbody>";
-                    //         while ($row = mysqli_fetch_array($result)) {
-                    //             echo "<tr>";
-                    //             echo "<td>" . $row['id'] . "</td>";
-                    //             echo "<td>" . $row['name'] . "</td>";
-                    //             echo "<td>";
-                    //             echo "<a href='update.php?indicator_id=". $row['id'] ."' title='Update Record' data-toggle='tooltip'><span class='glyphicon glyphicon-pencil'></span></a>";
-                    //             echo "<a href='delete.php?indicator_id=". $row['id'] ."' title='Delete Record' data-toggle='tooltip'><span class='glyphicon glyphicon-trash'></span></a>";
-                    //             echo "</td>";
-                    //             echo "</tr>";
-                    //         }
-                    //         echo "</tbody>";
-                    //         echo "</table>";
-                    //         // Free result set
-                    //         mysqli_free_result($result);
-                    //     } else {
-                    //         echo "<p class='lead'><em>No records were found.</em></p>";
-                    //     }
-                    // } else {
-                    //     echo "ERROR: Could not able to execute $sql. " . mysqli_error($con);
-                    // }
- 
-                    // // Close connection
-                    // mysqli_close($con);
                     ?>
                 </div>
             </div>        

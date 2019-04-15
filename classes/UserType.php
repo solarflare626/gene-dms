@@ -1,8 +1,8 @@
 <?php
-class UserType {
+class UserType extends BaseModel {
     private $_db,
             $_data,
-            $_table = "user_types";
+            $_table = "user_types", $_className = "UserType";
 
     public function __construct($userType = null) {
         $this->_db = DB::getInstance();

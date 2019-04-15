@@ -17,7 +17,7 @@
             $user = new User();
 
 			$remember = (Input::get('remember') === 'on') ? true : false;
-            $login = $user->login(Input::get('username'), Input::get('password'), $remember);
+            $login = $user->login(Input::get('username'), Input::get('password'), true);
 
             if($login) {
                 Redirect::to('index.php');

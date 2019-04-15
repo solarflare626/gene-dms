@@ -37,6 +37,7 @@ class DB {
                     $x++;
                 }
             }
+            
 
             if($this->_query->execute()) {
                 $this->_results = $this->_query->fetchAll(PDO::FETCH_OBJ);
@@ -49,24 +50,45 @@ class DB {
         return $this;
     }
 
+    public function lastInsertId(){
+        return $this->_pdo->lastInsertId();
+    }
+
     public function action($action, $table, $where = array()) {
-        if(count($where) === 3) {
-            $operators = array('=', '>', '<', '>=', '<=');
 
-            $field = $where[0];
-            $operator = $where[1];
-            $value = $where[2];
+       
+        if(is_string($where)){
+            $sql = "{$action} FROM {$table} {$where}";
 
-            if(in_array($operator, $operators)) {
-                $sql = "{$action} FROM {$table} WHERE {$field} {$operator} ?";
-
-                if(!$this->query($sql, array($value))->error()) {
-                    return $this;
-                }
+            if(!$this->query($sql)->error()) {
+                return $this;
             }
 
-        }
+        }else if(is_array($where)){
+            if(count($where) === 3) {
 
+                $operators = array('=', '>', '<', '>=', '<=');
+    
+                $field = $where[0];
+                $operator = $where[1];
+                $value = $where[2];
+    
+                if(in_array($operator, $operators)) {
+                    $sql = "{$action} FROM {$table} WHERE {$field} {$operator} ?";
+    
+                    if(!$this->query($sql, array($value))->error()) {
+                        return $this;
+                    }
+                }
+    
+            }
+
+        }else{
+            $sql = "{$action} FROM {$table} ";
+            if(!$this->query($sql)->error()) {
+                return $this;
+            }
+        }
         return false;
     }
 
@@ -118,7 +140,7 @@ class DB {
         return $this->action('DELETE ', $table, $where);
     }
 
-    public function get($table, $where) {
+    public function get($table, $where = null) {
         return $this->action('SELECT *', $table, $where);
     }
 

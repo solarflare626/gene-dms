@@ -20,6 +20,10 @@ class Validate {
 
                 if($rule === 'required' && empty($value)) {
                     $this->addError("{$item} is required");
+                } else if($rule === 'not-empty'){
+                    if(!count($value) > 0) {
+                        $this->addError("{$item}  must at least have one value.");
+                    }
                 } else if (!empty($value)) {
                     switch($rule) {
                         case 'min':
