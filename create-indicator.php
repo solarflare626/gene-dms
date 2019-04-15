@@ -27,7 +27,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     // Check input errors before inserting in database
     if(empty($indicator_name_err)){
         if($indicator->create(array( 'name' => $name ))){
-            Redirect::to("add-indicator.php");
+            Redirect::to("view-indicators.php");
         }else{
             echo "Something went wrong. Please try again later.";
         }
@@ -48,6 +48,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     <meta charset="UTF-8">
     <title>Create Indicator</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.css">
+    
     <style type="text/css">
         .wrapper{
             width: 500px;
@@ -72,7 +73,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                         </div>
                        
                         <input type="submit" class="btn btn-primary" value="Submit">
-                        <a href="add-indicator.php" class="btn btn-default">Cancel</a>
+                        <a href="view-indicators.php" class="btn btn-default">Cancel</a>
                     </form>
                 </div>
             </div>        

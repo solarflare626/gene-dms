@@ -21,7 +21,7 @@
                 </a>
             </li>
             <li <?php if($active_nav =="indicator") echo 'class="active"' ?>>
-                <a href="add-indicator.php">
+                <a href="view-indicators.php">
                     <i class="ti-plus"></i>
                     <p>Add Indicator</p>
                 </a>

@@ -86,7 +86,7 @@ if (Input::exists('post')) {
                             <p>Are you sure you want to delete this record?</p><br>
                             <p>
                                 <input type="submit" value="Yes" class="btn btn-danger">
-                                <a href="add-indicator.php" class="btn btn-default">No</a>
+                                <a href="view-indicators.php" class="btn btn-default">No</a>
                             </p>
                         </div>
                     </form>

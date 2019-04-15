@@ -33,7 +33,7 @@ if (isset($_POST["id"]) && !empty($_POST["id"])) {
 
         #update indicator
         if($indicator->update(array("name" => $name),$id)){
-            Redirect::to("add-indicator.php");
+            Redirect::to("view-indicators.php");
         }else{
             echo "Something went wrong. Please try again later.";
         }
@@ -102,7 +102,7 @@ if (isset($_POST["id"]) && !empty($_POST["id"])) {
                       
                         <input type="hidden" name="id" value="<?php echo $id; ?>"/>
                         <input type="submit" class="btn btn-primary" value="Submit">
-                        <a href="add-indicator.php" class="btn btn-default">Cancel</a>
+                        <a href="view-indicators.php" class="btn btn-default">Cancel</a>
                     </form>
                 </div>
             </div>        

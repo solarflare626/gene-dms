@@ -60,7 +60,7 @@
                     <ul class="nav navbar-nav navbar-right">
                
 						<li>
-                            <a href="index.html">
+                            <a href="logout.php">
 								<i class="ti-close"></i>
 								<p>Logout</p>
                             </a>

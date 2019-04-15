@@ -42,6 +42,8 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.js"></script>
   
+     <!--  Paper Dashboard core CSS    -->
+   <link href="assets/css/paper-dashboard.css" rel="stylesheet"/>
 	<style type="text/css">
 	table tr td:last-child a{
 		margin-right: 15px;
@@ -74,7 +76,7 @@
                     <ul class="nav navbar-nav navbar-right">
 
 						<li>
-                            <a href="#">
+                            <a href="logout.php">
 								<i class="ti-close"></i>
 								<p>Logout</p>
                             </a>
@@ -98,7 +100,7 @@
                     </div>
                     <?php
                         if (count($forms) > 0) {
-                            echo "<table class='table table-bordered table-striped'>";
+                            echo "<table class='table  table-striped'>";
                             echo "<thead>";
                             echo "<tr>";
                             echo "<th>ID</th>";
