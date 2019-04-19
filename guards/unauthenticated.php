@@ -6,6 +6,6 @@ if($user->isLoggedIn()){
     if($user->data()->group == 2)
         Redirect::to('dashboard-admin.php');
     else if($user->data()->group == 1)
-        Redirect::to('dashboard-entity.php');
+        Redirect::to('dashboard.php');
 }
 

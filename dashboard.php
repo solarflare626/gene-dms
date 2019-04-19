@@ -42,7 +42,7 @@
 
 <div class="wrapper">
 
-    <?php include 'includes/admin-sidebar.php' ?>
+    <?php include 'includes/entity-sidebar.php' ?>
 
     <div class="main-panel">
         <nav class="navbar navbar-default">
