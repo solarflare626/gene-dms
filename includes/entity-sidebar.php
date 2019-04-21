@@ -1,4 +1,22 @@
 
+<?php 
+ $user = new User();
+ $reqs = (new Request)->fetchAll("WHERE is_read = 0 AND user_id = ". $user->data()->id);
+
+ $_reqs = (new Request)->fetchAll("where user_id = ". $user->data()->id);
+
+ $unsubmitted_rfs = 0;
+
+ foreach ($_reqs as $index => $request) {
+     foreach ($request->requestForms() as $i => $rf) {
+         if($rf->data()->is_submitted == 0){
+            $unsubmitted_rfs++;
+         }
+         
+     }
+     
+ }
+?>
 <div class="sidebar" data-background-color="white" data-active-color="danger">
 
     <!--
@@ -20,22 +38,28 @@
                     <p>Dashboard</p>
                 </a>
             </li>
-            <li <?php if($active_nav =="indicator") echo 'class="active"' ?>>
-                <a href="view-indicators.php">
-                    <i class="ti-plus"></i>
-                    <p>Add Indicator</p>
-                </a>
-            </li>
-            <li <?php if($active_nav =="forms") echo 'class="active"' ?>>
-                <a href="view-forms.php">
-                    <i class="ti-notepad"></i>
-                    <p>View Forms</p>
-                </a>
-            </li>
             <li <?php if($active_nav =="requests") echo 'class="active"' ?>>
-                <a href="view-requests.php">
+                <a href="requests.php">
                     <i class="ti-notepad"></i>
-                    <p>Requests</p>
+                    <p>Requests
+                    <?php 
+                            $req_count = count($reqs) ;
+                            if($req_count> 0)
+                                echo '<span class="badge badge-pill badge-danger">'.$req_count.'</span>';
+                    ?>
+                    </p>
+                </a>
+            </li>
+            <li <?php if($active_nav =="request-forms") echo 'class="active"' ?>>
+                <a href="request-forms.php">
+                    <i class="ti-notepad"></i>
+                    <p>Request Forms
+                    <?php 
+                            
+                        if($unsubmitted_rfs > 0)
+                            echo '<span class="badge badge-pill badge-danger">'.$unsubmitted_rfs.'</span>';
+                    ?>
+                    </p>
                 </a>
             </li>
             <li <?php if($active_nav =="user") echo 'class="active"' ?>>

@@ -73,6 +73,7 @@ class InitDB{
                 `user_id` int(11) NOT NULL,
                 `subject` varchar(255),
                 `message` longtext,
+                `is_read` boolean DEFAULT 0,
                 `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
                 `deleted_at` datetime DEFAULT   NULL,
                 PRIMARY KEY (`id`)
@@ -139,7 +140,7 @@ class InitDB{
                 `id` int(11) NOT NULL AUTO_INCREMENT,
                 `request_id` int(11),
                 `form_id` int(11),
-                `is_submitted` boolean,
+                `is_submitted` boolean DEFAULT 0,
                 `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
                 `deleted_at` datetime DEFAULT   NULL,
                 PRIMARY KEY (`id`)

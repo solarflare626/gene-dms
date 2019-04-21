@@ -8,8 +8,8 @@ session_start();
 $GLOBALS['config'] = array(
     'mysql' => array(
         'host' => '127.0.0.1',
-        'username' => 'anonymous',
-        'password' => 'Ph617-0513',
+        'username' => 'root',
+        'password' => 'ph6170513',
         'db' => 'dams'
     ),
     'remember' => array(

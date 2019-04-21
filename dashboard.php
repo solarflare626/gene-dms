@@ -3,6 +3,8 @@
  include 'guards/authenticated.php';
  include 'guards/entity.php';
 
+ $user = new User();
+ $notifications = (new Notification)->fetchAll("where user_id=".$user->data()->id);
  $active_nav = "dashboard";
 ?>
 <!doctype html>
@@ -36,6 +38,13 @@
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet">
     <link href='https://fonts.googleapis.com/css?family=Muli:400,300' rel='stylesheet' type='text/css'>
     <link href="assets/css/themify-icons.css" rel="stylesheet">
+
+    <style type="text/css">
+
+    .unread{
+        background-color: #f1f1f1 !important;
+    }
+	</style>
 
 </head>
 <body>
@@ -161,34 +170,39 @@
                             <div class="content">
 							
  <?php
-                    // Include db file
-                    require_once "db.php";
-					$sql = "SELECT * FROM notifications";
-                    if($result = mysqli_query($con, $sql)){
-                        if(mysqli_num_rows($result) > 0){
+                    
+                        if(count($notifications)> 0){
                             echo "<table class='table table-striped'>"; 
                                 echo "<thead>";
                                     echo "<tr>";
                                         echo "<th>ID</th>";
-                                        echo "<th>Entity</th>";
-										echo "<th>Indicator</th>";
+                                        echo "<th>From</th>";
+										echo "<th>Message</th>";
 										echo "<th>Date</th>";
 										echo "<th>Action</th>";
                                     echo "</tr>";
                                 echo "</thead>";
                                 echo "<tbody>";
-                                while($row = mysqli_fetch_array($result)){
-                                    echo "<tr>";
-                                        echo "<td>" . $row['notif_id'] . "</td>";
-                                        echo "<td>" . $row['entity'] . "</td>";
-										echo "<td>" . $row['indicator'] . "</td>";
-										echo "<td>" . $row['time'] . "</td>";
-                                        echo "<td>";
-										echo "<a href='request.php' title='Send Request' data-toggle='tooltip'><span class='ti-email'></span> Send Request </a>";
-                                            echo "<a href='submitted-data.php' title='View Submission' data-toggle='tooltip'><span class='ti-eye'></span> View </a>";
-                                           
-                                        echo "</td>";
-                                    echo "</tr>";
+                                foreach ($notifications as $index => $value) {
+                                    $notif = $value->data();
+                                    $notif_type = $notif->type;
+
+                                    $data = new $notif_type($notif->type_id);
+                                    if($data->data()){
+                                        echo "<tr>";
+                                        echo "<td>" . $notif->id. "</td>";
+                                        echo "<td>Admin</td>";
+                                        if($notif_type == "Request"){
+                                            echo "<td style='white-space:pre;'><p> Admin sent you a request:\nSubject: " .$data->data()->subject."\nMessage: ".$data->data()->message."</p></td>";
+                                            echo "<td>" .$notif->created_at . "</td>";
+                                            echo "<td>";
+                                            echo "<a href='request.php?id=".$notif->type_id."' title='View Notification' data-toggle='tooltip'>View </a>";
+                                            echo "</td>";
+                                        }
+										
+                                        echo "</tr>";
+                                    }
+                                    
                                 }
                                 echo "</tbody>";                            
                             echo "</table>";
@@ -198,12 +212,7 @@
                         } else{
                             echo "<p class='lead'><em>No records were found.</em></p>";
                         }
-                    } else{
-                        echo "ERROR: Could not able to execute $sql. " . mysqli_error($con);
-                    }
- 
-                    // Close connection
-                    mysqli_close($con);
+                  
                     ?>
                             </div>
                         </div>

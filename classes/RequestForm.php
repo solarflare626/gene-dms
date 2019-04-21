@@ -36,9 +36,10 @@ class RequestForm  extends BaseModel{
         if($id){
             $this->find($id);
         }
-
-        return new Form($this->_data->id);
+        return new Form($this->_data->form_id);
     }
+
+    
 
     public function delete($id = null){
         if($id){
