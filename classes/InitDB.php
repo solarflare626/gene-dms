@@ -45,6 +45,12 @@ class InitDB{
                 `password` varchar(64) NOT NULL,
                 `salt` varchar(32) NOT NULL,
                 `name` varchar(50) NOT NULL,
+                `email` varchar(255),
+                `address` varchar(255),
+                `city` varchar(255),
+                `country` varchar(255),
+                `postal_code;` varchar(255),
+                `about_me;` longtext,
                 `joined` datetime NOT NULL,
                 `group` int(11) NOT NULL,
                 PRIMARY KEY (`id`)

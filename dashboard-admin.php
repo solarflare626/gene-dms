@@ -3,6 +3,7 @@
  include 'guards/authenticated.php';
  include 'guards/admin.php';
 
+ $users = (new User)->fetchAll("where id >1");
  $active_nav = "dashboard";
 ?>
 <!doctype html>
@@ -161,11 +162,7 @@
                             <div class="content">
 							
  <?php
-                    // Include db file
-                    require_once "db.php";
-					$sql = "SELECT * FROM notifications";
-                    if($result = mysqli_query($con, $sql)){
-                        if(mysqli_num_rows($result) > 0){
+                        if(count($users) > 0){
                             echo "<table class='table table-striped'>"; 
                                 echo "<thead>";
                                     echo "<tr>";
@@ -198,12 +195,6 @@
                         } else{
                             echo "<p class='lead'><em>No records were found.</em></p>";
                         }
-                    } else{
-                        echo "ERROR: Could not able to execute $sql. " . mysqli_error($con);
-                    }
- 
-                    // Close connection
-                    mysqli_close($con);
                     ?>
                             </div>
                         </div>

@@ -207,8 +207,6 @@
                                 echo "</tbody>";                            
                             echo "</table>";
                           
-							// Free result set
-                            mysqli_free_result($result);
                         } else{
                             echo "<p class='lead'><em>No records were found.</em></p>";
                         }
