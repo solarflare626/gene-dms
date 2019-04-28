@@ -19,6 +19,8 @@
 	<meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
     <meta name="viewport" content="width=device-width" />
 
+	<link rel='stylesheet' href='https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css'>
+
 	<link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css'>
     <link rel='stylesheet' href='https://dixso.github.io/custombox/dist/custombox.min.css'>
 	
@@ -93,12 +95,12 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="page-header clearfix">
-                        <h2 class="pull-left">Request Details</h2>
-                        <a href="create-request.php" class="btn btn-success pull-right">Add New Indicator</a>
+                        <h2 class="pull-left">Requests</h2>
+                        <a href="create-request.php" class="btn btn-success pull-right">Add New Request</a>
                     </div>
                     <?php
                         if (count($forms) > 0) {
-                            echo "<table class='table  table-striped'>";
+                            echo "<table id='requests-table' class='table  table-striped'>";
                             echo "<thead>";
                             echo "<tr>";
                             echo "<th>ID</th>";
@@ -117,8 +119,8 @@
                                 echo "<td>" . $row->subject . "</td>";
                                 echo "<td>" . $row->message . "</td>";
                                 echo "<td>";
-                                echo "<a href='update-request.php?id=". $row->id ."' title='Update Record' data-toggle='tooltip'><span class='glyphicon glyphicon-pencil'></span></a>";
-                                echo "<a href='delete-request.php?id=". $row->id ."' title='Delete Record' data-toggle='tooltip'><span class='glyphicon glyphicon-trash'></span></a>";
+                                echo "<a class='btn btn-primary' href='update-request.php?id=". $row->id ."' title='Update Record' data-toggle='tooltip'><span class='glyphicon glyphicon-pencil'></span></a>";
+                                echo "<a class='btn btn-primary' href='delete-request.php?id=". $row->id ."' title='Delete Record' data-toggle='tooltip'><span class='glyphicon glyphicon-trash'></span></a>";
                                 echo "</td>";
                                 echo "</tr>";
 
@@ -156,5 +158,13 @@
     <!--   Core JS Files   -->
     <script src="assets/js/jquery.min.js" type="text/javascript"></script>
 	<script src="assets/js/bootstrap.min.js" type="text/javascript"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js" type="text/javascript"></script>
+
+    <script>
+    $(document).ready(function(){
+        $('#requests-table').DataTable();
+
+    });
+    </script>
 
 </html>

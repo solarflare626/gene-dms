@@ -3,6 +3,6 @@
  
     $user = new User();
 
-    if($user->data()->group == 2){
+    if($user->is_admin()){
         Redirect::to('index.php');
     }

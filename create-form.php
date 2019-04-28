@@ -118,9 +118,9 @@ if(Input::exists('post')) {
             <div class="row">
                 <div class="col-md-12">
                     <div class="page-header">
-                        <h2>Create Indicator</h2>
+                        <h2>Create Form</h2>
                     </div>
-                    <p>Please fill this form and submit to add indicator to the database.</p>
+                    <!-- <p>Please fill this form and submit to add indicator to the database.</p> -->
                     
                         <form  role="form" action="" method="post">
                             <div class="form-group">

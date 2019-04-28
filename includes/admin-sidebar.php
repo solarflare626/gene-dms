@@ -39,7 +39,7 @@
                 </a>
             </li>
             <li <?php if($active_nav =="user") echo 'class="active"' ?>>
-                <a href="user-admin.php">
+                <a href="user.php">
                     <i class="ti-user"></i>
                     <p>User Profile</p>
                 </a>

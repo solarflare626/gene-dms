@@ -60,7 +60,7 @@ if (Input::exists('post')) {
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Create Form</title>
+    <title>Create Request</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.css">
     <script src="js/jquery-1.11.3.min.js"></script>
     <style type="text/css">
@@ -85,9 +85,8 @@ if (Input::exists('post')) {
             <div class="row">
                 <div class="col-md-12">
                     <div class="page-header">
-                        <h2>Create Indicator</h2>
+                        <h2>Create Request</h2>
                     </div>
-                    <p>Please fill this form and submit to add indicator to the database.</p>
                     
                         <form  role="form" action="" method="post">
 
@@ -112,7 +111,7 @@ if (Input::exists('post')) {
                             </div>
 
                             <div class="form-group">
-                                <label >message</label>
+                                <label >Message</label>
                                 <textarea class="form-control" name="message" type="text"  class="validate[required,length[0,100]] text-input" required aria-required="true" pattern="[A-Za-z]+\[A-Za-z]+" required placeholder="Insert request here..."><?php echo Input::get('message'); ?></textarea>
                             </div>
                             
@@ -160,7 +159,7 @@ if (Input::exists('post')) {
                             <br><br><br>
                             <input type="hidden" name="token" value="<?php echo Token::generate(); ?>">
                             <button type="submit" class="btn btn-primary" > Submit</button>
-                            <a href="view-forms.php" class="btn btn-default">Cancel</a>
+                            <a href="view-requests.php" class="btn btn-default">Cancel</a>
                         </form>
                     
                 </div>

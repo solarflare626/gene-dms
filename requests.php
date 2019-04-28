@@ -20,6 +20,7 @@
 
 	<meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
     <meta name="viewport" content="width=device-width" />
+	<link rel='stylesheet' href='https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css'>
 
 	<link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css'>
     <link rel='stylesheet' href='https://dixso.github.io/custombox/dist/custombox.min.css'>
@@ -99,11 +100,11 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="page-header clearfix">
-                        <h2 class="pull-left">Request Details</h2>
+                        <h2 class="pull-left">Requests</h2>
                     </div>
                     <?php
                         if (count($requests) > 0) {
-                            echo "<table class='table  table-striped'>";
+                            echo "<table id='requests-table' class='table  table-striped'>";
                             echo "<thead>";
                             echo "<tr>";
                             echo "<th>ID</th>";
@@ -158,5 +159,12 @@
     <!--   Core JS Files   -->
     <script src="assets/js/jquery.min.js" type="text/javascript"></script>
 	<script src="assets/js/bootstrap.min.js" type="text/javascript"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js" type="text/javascript"></script>
 
+    <script>
+        $(document).ready(function(){
+            $('#requests-table').DataTable();
+
+        });
+    </script>
 </html>

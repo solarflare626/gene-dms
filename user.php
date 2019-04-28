@@ -3,17 +3,81 @@
  require_once 'core/init.php';
  include 'guards/authenticated.php';
 
+ if(Input::exists('post')) {
+    if(Token::check(Input::get('token'))) {
+        $user = new User(Input::get('id'));
 
- $active_nav = "user";
- if(Input::exists('id')) {
+        if(Input::get("update_picture")==1){
+            $image=$_FILES['image']['name']; 
+            $expimage=explode('.',$image);
+            $imageexptype=$expimage[1];
+            $date = date('m/d/Yh:i:sa', time());
+            $rand=rand(10000,99999);
+            $encname=$date.$rand;
+            $imagename=md5($encname).'.'.$imageexptype;
+            $imagepath="assets/img/profile/".$imagename;
+            move_uploaded_file($_FILES["image"]["tmp_name"],$imagepath);
+
+            // die("imagepath:".$imagepath);
+            $user->update(array(
+                'picture' => $imagepath,
+            ),Input::get('id'));
+
+            $user_id = Input::get('id');
+            $user = new User($user_id);
+            $profile = $user->data();
+            Redirect::to("user.php?id=".$profile->id);
+
+        }else{
+
+            $user->update(array(
+                'name' => Input::get('name'),
+                'username' => Input::get('username'),
+                'email' => Input::get('email'),
+                'address' => Input::get('address'),
+                'city' => Input::get('city'),
+                'country' => Input::get('country'),
+                'postal_code' => Input::get('postal_code'),
+                'about_me' => Input::get('about_me')
+            ),Input::get('id'));
+        }
+        
+        
+
+        $user_id = Input::get('id');
+         $user = new User($user_id);
+        $profile = $user->data();
+
+        $cur_user = new User();
+        if( !$cur_user->is_admin() &&  $cur_user->data()->id != $user->data()->id){
+            Redirect::to('index.php');
+        }
+    }
+
+ }else if(Input::exists('get')) {
     $user_id = Input::get('id');
     $user = new User($user_id);
     $profile = $user->data();
+
+    $cur_user = new User();
+    if( !$cur_user->is_admin() &&  $cur_user->data()->id != $user->data()->id){
+        Redirect::to('index.php');
+    }
  }else{
+    $active_nav = "user";
     $user = new User();
     $profile = $user->data();
  }
 
+
+// $name = $profile->name;
+// $username = $profile->username;
+// $email = $profile->email;
+// $address = $profile->address;
+// $city = $profile->city;
+// $country = $profile->country;
+// $postal_code = $profile->postal_code;
+// $about_me = $profile->about_me;
 ?>
 <!doctype html>
 <html lang="en">
@@ -50,7 +114,12 @@
 
 <div class="wrapper">
 
-    <?php include 'includes/entity-sidebar.php' ?>
+    <?php
+        if($user->is_admin())
+            include 'includes/admin-sidebar.php'; 
+        else
+            include 'includes/entity-sidebar.php'; 
+     ?>
 
     <div class="main-panel">
 		<nav class="navbar navbar-default">
@@ -90,10 +159,13 @@
                             </div>
                             <div class="content">
                                 <div class="author">
-                                  <img class="avatar border-white" src="assets/img/faces/face-2.jpg" alt="..."/>
-                                  <h4 class="title">Admin<br />
-                                     <a href="#"><small>@admin</small></a>
-                                  </h4>
+                                <div id="employee-profile" class="img img-bordered img-responsive" style="height: 200px; width: 200px;"> </div>
+                                  <div style="position:block;">
+                                    <h4 class="title" ><?php echo $profile->name; ?><br />
+                                        <a href="#"><small><?php echo "@".$profile->name;?></small></a>
+                                    </h4>
+                                  </div>
+                                  
                                 </div>
                                 <p class="description text-center">
                      
@@ -110,39 +182,24 @@
                                 <h4 class="title">Edit Profile</h4>
                             </div>
                             <div class="content">
-                                <form>
+                                <form method="post" action="user.php?id=<?php echo $profile->id ?>"">
                                     <div class="row">
                                         <div class="col-md-5">
                                             <div class="form-group">
                                                 <label>Company</label>
-                                                <input type="text" class="form-control border-input" disabled placeholder="Company" value="Creative Code Inc.">
+                                                <input required type="text" class="form-control border-input" name="name" placeholder="Company" value="<?php echo $profile->name;?>">
                                             </div>
                                         </div>
                                         <div class="col-md-3">
                                             <div class="form-group">
                                                 <label>Username</label>
-                                                <input type="text" class="form-control border-input" placeholder="Username" value="michael23">
+                                                <input required type="text" class="form-control border-input" name="username" placeholder="Username" value="<?php echo $profile->username; ?>"">
                                             </div>
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <label for="exampleInputEmail1">Email address</label>
-                                                <input type="email" class="form-control border-input" placeholder="Email">
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label>First Name</label>
-                                                <input type="text" class="form-control border-input" placeholder="Company" value="Chet">
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label>Last Name</label>
-                                                <input type="text" class="form-control border-input" placeholder="Last Name" value="Faker">
+                                                <input required type="email" class="form-control border-input" name="email" placeholder="Email" value="<?php echo $profile->email;?>">
                                             </div>
                                         </div>
                                     </div>
@@ -151,7 +208,7 @@
                                         <div class="col-md-12">
                                             <div class="form-group">
                                                 <label>Address</label>
-                                                <input type="text" class="form-control border-input" placeholder="Home Address" value="Melbourne, Australia">
+                                                <input required type="text" class="form-control border-input" name="address" placeholder="Address" value="<?php echo $profile->address;?>">
                                             </div>
                                         </div>
                                     </div>
@@ -160,19 +217,19 @@
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <label>City</label>
-                                                <input type="text" class="form-control border-input" placeholder="City" value="Melbourne">
+                                                <input required type="text" class="form-control border-input" name="city" placeholder="City" value="<?php echo $profile->city;?>">
                                             </div>
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <label>Country</label>
-                                                <input type="text" class="form-control border-input" placeholder="Country" value="Australia">
+                                                <input required type="text" class="form-control border-input" name="country" placeholder="Country" value="<?php echo $profile->country;?>">
                                             </div>
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <label>Postal Code</label>
-                                                <input type="number" class="form-control border-input" placeholder="ZIP Code">
+                                                <input required type="number" class="form-control border-input" name="postal_code" placeholder="ZIP Code" value="<?php echo $profile->postal_code;?>">
                                             </div>
                                         </div>
                                     </div>
@@ -181,13 +238,13 @@
                                         <div class="col-md-12">
                                             <div class="form-group">
                                                 <label>About Me</label>
-                                                <textarea rows="5" class="form-control border-input" placeholder="Here can be your description" value="Mike">Oh so, your weak rhyme
-You doubt I'll bother, reading into it
-I'll probably won't, left to my own devices
-But that's the difference in our opinions.</textarea>
+                                                <textarea  required rows="5" class="form-control border-input" placeholder="Here can be your description" name="about_me" value="<?php echo $profile->about_me;?>" ><?php echo $profile->about_me;?></textarea>
                                             </div>
                                         </div>
                                     </div>
+                                    <input type="hidden" name="token" value="<?php echo Token::generate(); ?>">
+                                    <input type="hidden" name="id" value="<?php echo $profile->id; ?>">
+                            
                                     <div class="text-center">
                                         <button type="submit" class="btn btn-info btn-fill btn-wd">Update Profile</button>
                                     </div>
@@ -240,5 +297,72 @@ But that's the difference in our opinions.</textarea>
 
 	<!-- Paper Dashboard DEMO methods, don't include it in your project! -->
 	<script src="assets/js/demo.js"></script>
+    
+    <script>
+        (function ( $ ) {
+                $.fn.cm_user_profile_pic_update = function (options) {
+                    function randomizer(){
+                        return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+                    }
 
+                    return this.each(function() {
+                        let guid = randomizer();
+                        $(this).append('<div id="cm-profile-pic_'+guid+'" class="profile-user-img img-responsive img-circle">' +
+                            '<form id="cm-profile-pic_'+guid+'_form" method="POST" action="'+options.submit+'" enctype="multipart/form-data">' +
+                            '<input type="hidden" name="token" value="<?php echo  Token::generate(); ?>">'+
+                            '<input id="cm-profile-pic_'+guid+'_img-upload" class="hidden" name="image" type="file"><form></div>');
+                        let div = $('#cm-profile-pic_'+guid+'');
+                        let element = '<div id="cm-profile-pic_'+guid+'_container" >' +
+                            '<img id="cm-profile-pic_'+guid+'_picture"  class="avatar border-white" style="position:absolute;" src="'+options.src+'" alt="User profile picture">' +
+                            '<a type="button" class="btn-primary" id="cm-profile-pic_'+guid+'_btn" style="color:white;background:#4285F4;margin-left:27px;top:190px;position: absolute;border-radius: 10px; padding: 0px 10px 0px ;">Edit</a>' +
+                            '</div>';
+                        div.append(element);
+
+                        $(document).on('click','#cm-profile-pic_'+guid+'_picture',function () {
+                            $('#cm-profile-pic_'+guid+'_img-upload').click();
+                        });
+
+                        $(document).on('click','#cm-profile-pic_'+guid+'_btn',function (e) {
+                            switch ($(this).html()){
+                                case 'Edit':
+                                    $('#cm-profile-pic_'+guid+'_img-upload').click();
+                                    break;
+                                case 'Save':
+                                    $('#cm-profile-pic_'+guid+'_form').submit();
+                                    break;
+
+                            }
+                        });
+
+                        $(document).on('change','#cm-profile-pic_'+guid+'_img-upload',function () {
+                            var input = this;
+                            var url = $(this).val();
+                            var ext = url.substring(url.lastIndexOf('.') + 1).toLowerCase();
+                            if (input.files && input.files[0]&& (ext == "gif" || ext == "png" || ext == "jpeg" || ext == "jpg"))
+                            {
+                                var reader = new FileReader();
+
+                                reader.onload = function (e) {
+                                    $('#cm-profile-pic_'+guid+'_picture').attr('src', e.target.result);
+                                    $('#cm-profile-pic_'+guid+'_btn').html('Save').css('margin-left','25px');
+                                };
+                                reader.readAsDataURL(input.files[0]);
+                            }else{
+                                $('#cm-profile-pic_'+guid+'_picture').attr('src', options.src);
+                                $('#cm-profile-pic_'+guid+'_btn').html('Edit').css('margin-left','27px');
+
+                            }
+                        });
+                    });
+                }
+            }( jQuery ));
+    </script>
+
+    <script>
+        $("#employee-profile").cm_user_profile_pic_update({
+            src: "<?php echo $profile->picture ?>",
+            submit:"/user.php?id=<?php echo $profile->id ?>&update_picture=1",
+
+        });
+    </script>
 </html>

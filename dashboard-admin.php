@@ -4,7 +4,12 @@
  include 'guards/admin.php';
 
  $users = (new User)->fetchAll("where id >1");
+ $forms = (new Form)->fetchAll();
+ $submitted_forms = (new RequestForm)->fetchAll("where is_submitted =1");
+ $request_forms = (new RequestForm)->fetchAll();
+ $indicators = (new Indicator)->fetchAll();
  $active_nav = "dashboard";
+
 ?>
 <!doctype html>
 <html lang="en">
@@ -18,6 +23,7 @@
 	<meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
     <meta name="viewport" content="width=device-width" />
 
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.18/datatables.min.css"/>
 
     <!-- Bootstrap core CSS     -->
     <link href="assets/css/bootstrap.min.css" rel="stylesheet" />
@@ -38,7 +44,8 @@
     <link href='https://fonts.googleapis.com/css?family=Muli:400,300' rel='stylesheet' type='text/css'>
     <link href="assets/css/themify-icons.css" rel="stylesheet">
 
-</head>
+    
+ </head>
 <body>
 
 <div class="wrapper">
@@ -86,8 +93,8 @@
                                     </div>
                                     <div class="col-xs-7">
                                         <div class="numbers">
-                                            <p>Talent Availability</p>
-											26
+                                            <p>Total Entity Users</p>
+											<?php echo count($users) ?>
                                         </div>
                                     </div>
                                 </div>
@@ -105,8 +112,9 @@
                                     </div>
                                     <div class="col-xs-7">
                                         <div class="numbers">
-                                        <p>Infrastructure</p>
-                                            10
+                                        <p>Total </p>
+                                        <p>Forms</p>
+                                            <?php echo count($forms);?> 
                                         </div>
                                     </div>
                                 </div>
@@ -124,8 +132,8 @@
                                     </div>
                                     <div class="col-xs-7">
                                         <div class="numbers">
-                                            <p>Cost and Business Environment</p>
-                                            23
+                                        <p>Total</p><p>Indicators</p>
+                                            <?php echo count($indicators);?> 
                                         </div>
                                     </div>
                                 </div>
@@ -143,8 +151,10 @@
                                     </div>
                                     <div class="col-xs-7">
                                         <div class="numbers">
-                                            <p>Digital Innovation</p>
-                                            11
+                                            <p>Submitted / Request Forms</p>
+                                            <?php echo count($submitted_forms);
+                                                 echo "/";
+                                                 echo count($request_forms);?> 
                                         </div>
                                     </div>
                                 </div>
@@ -157,32 +167,37 @@
                     <div class="col-md-12">
                         <div class="card">
                             <div class="header">
-                                <h4 class="title">Recent</h4>
+                                <h4 class="title">Submitted Forms</h4>
                             </div>
                             <div class="content">
 							
  <?php
-                        if(count($users) > 0){
-                            echo "<table class='table table-striped'>"; 
+                        if(count($submitted_forms) > 0){
+                            echo "<table id='submitted-forms-table' class='table table-striped'>"; 
                                 echo "<thead>";
                                     echo "<tr>";
-                                        echo "<th>ID</th>";
-                                        echo "<th>Entity</th>";
+                                        echo "<th>Form ID</th>";
+                                        echo "<th>Form Name</th>";
 										echo "<th>Indicator</th>";
+                                        echo "<th>Entity</th>";
 										echo "<th>Date</th>";
 										echo "<th>Action</th>";
                                     echo "</tr>";
                                 echo "</thead>";
                                 echo "<tbody>";
-                                while($row = mysqli_fetch_array($result)){
+                                foreach ($submitted_forms as $index => $value) {
+                                    $entity = $value->user();
+                                    $indicator =  $value->indicator();
+                                    $form = $value->form();
+
                                     echo "<tr>";
-                                        echo "<td>" . $row['notif_id'] . "</td>";
-                                        echo "<td>" . $row['entity'] . "</td>";
-										echo "<td>" . $row['indicator'] . "</td>";
-										echo "<td>" . $row['time'] . "</td>";
+                                        echo "<td>" . $form->data()->id . "</td>";
+                                        echo "<td>" . $form->data()->name . "</td>";
+										echo "<td>" . $indicator->data()->name . "</td>";
+                                        echo "<td>" . $entity->data()->name. "</td>";
+										echo "<td>" . $value->data()->created_at. "</td>";
                                         echo "<td>";
-										echo "<a href='request.php' title='Send Request' data-toggle='tooltip'><span class='ti-email'></span> Send Request </a>";
-                                            echo "<a href='submitted-data.php' title='View Submission' data-toggle='tooltip'><span class='ti-eye'></span> View </a>";
+                                            echo "<a class='btn btn-primary' href='submitted-form.php?id=".$value->data()->id."' title='View Submission' data-toggle='tooltip'> View </a>";
                                            
                                         echo "</td>";
                                     echo "</tr>";
@@ -190,8 +205,6 @@
                                 echo "</tbody>";                            
                             echo "</table>";
                           
-							// Free result set
-                            mysqli_free_result($result);
                         } else{
                             echo "<p class='lead'><em>No records were found.</em></p>";
                         }
@@ -200,8 +213,73 @@
                         </div>
                     </div>
                 </div>
-				<div class="row">
+                <div class="row">
 
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="header">
+                                <h4 class="title">Users</h4>
+                            </div>
+                            <div class="content">
+							
+ <?php
+                        if(count($users) > 0){
+                            echo "<table  id='users-table'class='table table-striped'>"; 
+                                echo "<thead>";
+                                    echo "<tr>";
+                                        echo "<th>ID</th>";
+                                        echo "<th>Name</th>";
+										echo "<th>Action</th>";
+                                    echo "</tr>";
+                                echo "</thead>";
+                                echo "<tbody>";
+                                foreach ($users as $index => $value) {
+                                    echo "<tr>";
+                                        echo "<td>" . $value->data()->id . "</td>";
+                                        echo "<td>" . $value->data()->name . "</td>";
+                                        echo "<td>";
+                                            echo "<a class='btn btn-primary' href='user.php?id=".$value->data()->id."' title='View Submission' data-toggle='tooltip'> View </a>";
+                                           
+                                        echo "</td>";
+                                    echo "</tr>";
+                                }
+                                echo "</tbody>";                            
+                            echo "</table>";
+                          
+                        } else{
+                            echo "<p class='lead'><em>No records were found.</em></p>";
+                        }
+                    ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="header">
+                                <h4 class="title">Submitted Forms</h4>
+                                <p class="category">per user</p>
+                            </div>
+                            <div class="content">
+                                <div id="chartSubmitted" class="ct-chart"></div>
+                                <!-- <div class="footer">
+                                    <div class="chart-legend">
+                                        <i class="fa fa-circle text-info"></i> Open
+                                        <i class="fa fa-circle text-danger"></i> Click
+                                        <i class="fa fa-circle text-warning"></i> Click Second Time
+                                    </div>
+                                    <hr>
+                                    <div class="stats">
+                                        <i class="ti-reload"></i> Updated 3 minutes ago
+                                    </div>
+                                </div> -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- <div class="row">
                     <div class="col-md-12">
                         <div class="card">
                             <div class="header">
@@ -225,7 +303,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="row">
+				 -->
+                <!-- <div class="row">
                     <div class="col-md-6">
                         <div class="card">
                             <div class="header">
@@ -273,7 +352,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
             <footer class="footer">
                 <div class="container-fluid">
                     <nav class="pull-left">
@@ -290,6 +369,7 @@
     <!--   Core JS Files   -->
     <script src="assets/js/jquery.min.js" type="text/javascript"></script>
 	<script src="assets/js/bootstrap.min.js" type="text/javascript"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.18/datatables.min.js"></script>
 
 	<!--  Checkbox, Radio & Switch Plugins -->
 	<script src="assets/js/bootstrap-checkbox-radio.js"></script>
@@ -308,6 +388,38 @@
 
 	<!-- Paper Dashboard DEMO methods, don't include it in your project! -->
 	<script src="assets/js/demo.js"></script>
+
+    <script>
+    $(document).ready(function(){
+        <?php
+            $labels = [];
+            $series = [];
+            foreach ($users as $key => $value) {
+                array_push($labels,$value->data()->name);
+                $req_forms = $value->submittedForms();
+                array_push($series,count($req_forms));
+                
+                
+            }
+
+            echo "var data = {";
+            echo    'labels: '. json_encode($labels).',';
+            echo    'series: ['.json_encode($series).']';
+            echo "};";
+
+        ?>
+
+        new Chartist.Bar('#chartSubmitted', data);
+
+    });
+    </script>
+    <script>
+    $(document).ready(function(){
+        $('#users-table').DataTable();
+        $('#submitted-forms-table').DataTable();
+
+    });
+    </script>
 
 	<script type="text/javascript">
     	$(document).ready(function(){

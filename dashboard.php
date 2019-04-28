@@ -5,7 +5,12 @@
 
  $user = new User();
  $notifications = (new Notification)->fetchAll("where user_id=".$user->data()->id);
+//  die("notif:".count($notifications));
  $active_nav = "dashboard";
+
+ $requests = $user->requests();
+ $request_forms = $user->requestForms();
+ $submitted_forms = $user->submittedForms();
 ?>
 <!doctype html>
 <html lang="en">
@@ -19,6 +24,7 @@
 	<meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
     <meta name="viewport" content="width=device-width" />
 
+	<link rel='stylesheet' href='https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css'>
 
     <!-- Bootstrap core CSS     -->
     <link href="assets/css/bootstrap.min.css" rel="stylesheet" />
@@ -94,46 +100,8 @@
                                     </div>
                                     <div class="col-xs-7">
                                         <div class="numbers">
-                                            <p>Talent Availability</p>
-											26
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-sm-6">
-                        <div class="card">
-                            <div class="content">
-                                <div class="row">
-                                    <div class="col-xs-5">
-                                        <div class="icon-big icon-success text-center">
-                                            <i class="ti-home"></i>
-                                        </div>
-                                    </div>
-                                    <div class="col-xs-7">
-                                        <div class="numbers">
-                                        <p>Infrastructure</p>
-                                            10
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-sm-6">
-                        <div class="card">
-                            <div class="content">
-                                <div class="row">
-                                    <div class="col-xs-5">
-                                        <div class="icon-big icon-danger text-center">
-                                            <i class="ti-money"></i>
-                                        </div>
-                                    </div>
-                                    <div class="col-xs-7">
-                                        <div class="numbers">
-                                            <p>Cost and Business Environment</p>
-                                            23
+                                            <p>Total</p><p> Requests</p>
+											<?php echo count($requests) ?>
                                         </div>
                                     </div>
                                 </div>
@@ -151,8 +119,46 @@
                                     </div>
                                     <div class="col-xs-7">
                                         <div class="numbers">
-                                            <p>Digital Innovation</p>
-                                            11
+                                            <p>Total Notifications</p>
+                                            <?php echo count($notifications) ?>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-sm-6">
+                        <div class="card">
+                            <div class="content">
+                                <div class="row">
+                                    <div class="col-xs-5">
+                                        <div class="icon-big icon-success text-center">
+                                            <i class="ti-home"></i>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-7">
+                                        <div class="numbers">
+                                        <p>Total</p><p> Request Forms</p>
+                                        <?php echo count($request_forms) ?>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-sm-6">
+                        <div class="card">
+                            <div class="content">
+                                <div class="row">
+                                    <div class="col-xs-5">
+                                        <div class="icon-big icon-danger text-center">
+                                            <i class="ti-money"></i>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-7">
+                                        <div class="numbers">
+                                            <p>Total Submitted Forms</p>
+                                            <?php echo count($submitted_forms) ?>
                                         </div>
                                     </div>
                                 </div>
@@ -172,7 +178,7 @@
  <?php
                     
                         if(count($notifications)> 0){
-                            echo "<table class='table table-striped'>"; 
+                            echo "<table id='notifications-table' class='table table-striped'>"; 
                                 echo "<thead>";
                                     echo "<tr>";
                                         echo "<th>ID</th>";
@@ -196,7 +202,7 @@
                                             echo "<td style='white-space:pre;'><p> Admin sent you a request:\nSubject: " .$data->data()->subject."\nMessage: ".$data->data()->message."</p></td>";
                                             echo "<td>" .$notif->created_at . "</td>";
                                             echo "<td>";
-                                            echo "<a href='request.php?id=".$notif->type_id."' title='View Notification' data-toggle='tooltip'>View </a>";
+                                            echo "<a class='btn btn-primary' href='request.php?id=".$notif->type_id."' title='View Notification' data-toggle='tooltip'>View </a>";
                                             echo "</td>";
                                         }
 										
@@ -216,7 +222,7 @@
                         </div>
                     </div>
                 </div>
-				<div class="row">
+				<!-- <div class="row">
 
                     <div class="col-md-12">
                         <div class="card">
@@ -287,7 +293,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> -->
             </div>
         </div>
             <footer class="footer">
@@ -342,4 +348,12 @@
     	});
 	</script>
 
+    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js" type="text/javascript"></script>
+
+    <script>
+        $(document).ready(function(){
+            $('#notifications-table').DataTable();
+
+        });
+    </script>
 </html>

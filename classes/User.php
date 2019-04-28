@@ -50,7 +50,8 @@ class User extends BaseModel{
         }
 
         if(!$this->_db->update('users', $id, $fields)) {
-            throw new Exception('There was a problem updating');
+            // throw new Exception('There was a problem updating');
+            die("problem");
         }
     }
 
@@ -100,6 +101,14 @@ class User extends BaseModel{
         return false;
     }
 
+    public function is_admin(){
+        return $this->_data->group == 2;
+    }
+
+    public function is_entity(){
+        return $this->_data->group == 1;
+    }
+
     public function hasPermission($key) {
         $group = $this->_db->get('groups', array('id', '=', $this->data()->group));
 
@@ -130,4 +139,56 @@ class User extends BaseModel{
     public function isLoggedIn() {
         return $this->isLoggedIn;
     }
+
+    public function requests($id =null){
+        if($id){
+            $this->find($id);
+        }
+
+        $user_id = $this->_data->id;
+
+        return (new Request)->fetchAll(array('user_id','=', $user_id));
+    }
+    
+    public function requestForms($id =null){
+        if($id){
+            $this->find($id);
+        }
+        $request_forms = [];
+
+        $requests = $this->requests();
+
+        foreach ($requests as $key => $req) {
+            $req_forms = $req->requestForms();
+            
+            foreach ($req_forms as $key2 => $req_form) {
+                    array_push($request_forms,$req_form);
+                
+            }
+        }
+
+        return $request_forms;
+    }
+
+    public function submittedForms($id =null){
+        if($id){
+            $this->find($id);
+        }
+        $request_forms = [];
+
+        $requests = $this->requests();
+
+        foreach ($requests as $key => $req) {
+            $req_forms = $req->requestForms();
+            
+            foreach ($req_forms as $key2 => $req_form) {
+                if($req_form->data()->is_submitted == 1){
+                    array_push($request_forms,$req_form);
+                }
+            }
+        }
+
+        return $request_forms;
+    }
+
 }

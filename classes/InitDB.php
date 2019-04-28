@@ -45,13 +45,14 @@ class InitDB{
                 `password` varchar(64) NOT NULL,
                 `salt` varchar(32) NOT NULL,
                 `name` varchar(50) NOT NULL,
+                `picture` varchar(255) DEFAULT 'assets/img/faces/face-2.jpg',
                 `email` varchar(255),
                 `address` varchar(255),
                 `city` varchar(255),
                 `country` varchar(255),
-                `postal_code;` varchar(255),
-                `about_me;` longtext,
-                `joined` datetime NOT NULL,
+                `postal_code` varchar(255),
+                `about_me` varchar(255),
+                `joined` datetime DEFAULT CURRENT_TIMESTAMP,
                 `group` int(11) NOT NULL,
                 PRIMARY KEY (`id`)
             )
@@ -149,6 +150,7 @@ class InitDB{
                 `is_submitted` boolean DEFAULT 0,
                 `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
                 `deleted_at` datetime DEFAULT   NULL,
+                `submitted_at` datetime DEFAULT   NULL,
                 PRIMARY KEY (`id`)
             )
         ");

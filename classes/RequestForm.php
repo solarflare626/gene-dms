@@ -38,7 +38,24 @@ class RequestForm  extends BaseModel{
         }
         return new Form($this->_data->form_id);
     }
+    
+    public function user($id = null){
+        if($id){
+            $this->find($id);
+        }
+        $request = new Request($this->_data->request_id);
+        return $request->recipient();
+    }
 
+    public function indicator($id = null){
+        if($id){
+            $this->find($id);
+        }
+        
+        return $this->form()->indicator();
+    }
+
+    
     
 
     public function delete($id = null){
