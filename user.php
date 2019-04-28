@@ -160,7 +160,7 @@
                             <div class="content">
                                 <div class="author">
                                 <div id="employee-profile" class="img img-bordered img-responsive" style="height: 200px; width: 200px;"> </div>
-                                  <div style="position:block;">
+                                  <div style="position:absolute;margin-left:35%;bottom:20%;">
                                     <h4 class="title" ><?php echo $profile->name; ?><br />
                                         <a href="#"><small><?php echo "@".$profile->name;?></small></a>
                                     </h4>
@@ -314,7 +314,7 @@
                         let div = $('#cm-profile-pic_'+guid+'');
                         let element = '<div id="cm-profile-pic_'+guid+'_container" >' +
                             '<img id="cm-profile-pic_'+guid+'_picture"  class="avatar border-white" style="position:absolute;" src="'+options.src+'" alt="User profile picture">' +
-                            '<a type="button" class="btn-primary" id="cm-profile-pic_'+guid+'_btn" style="color:white;background:#4285F4;margin-left:27px;top:190px;position: absolute;border-radius: 10px; padding: 0px 10px 0px ;">Edit</a>' +
+                            '<a type="button" class="btn-primary" id="cm-profile-pic_'+guid+'_btn" style="color:white;background:#4285F4;margin-left:27px;top:190px;position: absolute;border-radius: 10px; padding: 0px 10px 0px 10px;">Edit</a>' +
                             '</div>';
                         div.append(element);
 
