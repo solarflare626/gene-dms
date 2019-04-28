@@ -29,7 +29,6 @@
             Redirect::to("user.php?id=".$profile->id);
 
         }else{
-
             $user->update(array(
                 'name' => Input::get('name'),
                 'username' => Input::get('username'),
@@ -40,18 +39,24 @@
                 'postal_code' => Input::get('postal_code'),
                 'about_me' => Input::get('about_me')
             ),Input::get('id'));
+
+            
+            $user_id = Input::get('id');
+            $user = new User($user_id);
+            $profile = $user->data();
+
+            $cur_user = new User();
+            if( !$cur_user->is_admin() &&  $cur_user->data()->id != $user->data()->id){
+                Redirect::to('index.php');
+            }
+            Redirect::to("user.php?id=".$profile->id);
+            
         }
         
         
 
-        $user_id = Input::get('id');
-         $user = new User($user_id);
-        $profile = $user->data();
-
-        $cur_user = new User();
-        if( !$cur_user->is_admin() &&  $cur_user->data()->id != $user->data()->id){
-            Redirect::to('index.php');
-        }
+    }else{
+        die("Please Reload Page");
     }
 
  }else if(Input::exists('get')) {
@@ -69,15 +74,16 @@
     $profile = $user->data();
  }
 
+ $token = Token::generate();
 
-// $name = $profile->name;
-// $username = $profile->username;
-// $email = $profile->email;
-// $address = $profile->address;
-// $city = $profile->city;
-// $country = $profile->country;
-// $postal_code = $profile->postal_code;
-// $about_me = $profile->about_me;
+$name = $profile->name;
+$username = $profile->username;
+$email = $profile->email;
+$address = $profile->address;
+$city = $profile->city;
+$country = $profile->country;
+$postal_code = $profile->postal_code;
+$about_me = $profile->about_me;
 ?>
 <!doctype html>
 <html lang="en">
@@ -242,7 +248,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <input type="hidden" name="token" value="<?php echo Token::generate(); ?>">
+                                    <input type="hidden" name="token" value="<?php echo $token; ?>">
                                     <input type="hidden" name="id" value="<?php echo $profile->id; ?>">
                             
                                     <div class="text-center">
@@ -309,7 +315,7 @@
                         let guid = randomizer();
                         $(this).append('<div id="cm-profile-pic_'+guid+'" class="profile-user-img img-responsive img-circle">' +
                             '<form id="cm-profile-pic_'+guid+'_form" method="POST" action="'+options.submit+'" enctype="multipart/form-data">' +
-                            '<input type="hidden" name="token" value="<?php echo  Token::generate(); ?>">'+
+                            '<input type="hidden" name="token" value="<?php echo  $token; ?>">'+
                             '<input id="cm-profile-pic_'+guid+'_img-upload" class="hidden" name="image" type="file"><form></div>');
                         let div = $('#cm-profile-pic_'+guid+'');
                         let element = '<div id="cm-profile-pic_'+guid+'_container" >' +
