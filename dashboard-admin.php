@@ -218,8 +218,12 @@
                     <div class="col-md-12">
                         <div class="card">
                             <div class="header">
-                                <h4 class="title">Users</h4>
+                                <h4 class="pull-left title">Users</h4>
+                                <a href="add-user.php" class="btn btn-success pull-right">Add New User</a>
+                                
                             </div>
+                            <br>
+                            <br>
                             <div class="content">
 							
  <?php
