@@ -179,25 +179,25 @@ class InitDB{
             'group' => 2
         ));
 
-        $salt = Hash::salt(32);
-        create_user(array(
-            'name' => "ched",
-            'username' => "ched",
-            'password' => Hash::make("ched", $salt),
-            'salt' => $salt,
-            'joined' => date('Y-m-d H:i:s'),
-            'group' => 1
-        ));
+        // $salt = Hash::salt(32);
+        // create_user(array(
+        //     'name' => "ched",
+        //     'username' => "ched",
+        //     'password' => Hash::make("ched", $salt),
+        //     'salt' => $salt,
+        //     'joined' => date('Y-m-d H:i:s'),
+        //     'group' => 1
+        // ));
 
-        $salt = Hash::salt(32);
-        create_user(array(
-            'name' => "deped",
-            'username' => "deped",
-            'password' => Hash::make("deped", $salt),
-            'salt' => $salt,
-            'joined' => date('Y-m-d H:i:s'),
-            'group' => 1
-        ));
+        // $salt = Hash::salt(32);
+        // create_user(array(
+        //     'name' => "deped",
+        //     'username' => "deped",
+        //     'password' => Hash::make("deped", $salt),
+        //     'salt' => $salt,
+        //     'joined' => date('Y-m-d H:i:s'),
+        //     'group' => 1
+        // ));
 
         
     }

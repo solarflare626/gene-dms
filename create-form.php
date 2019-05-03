@@ -10,7 +10,7 @@ $indicators = (new Indicator)->fetchAll();
 $name =  "";
 $indicator_name_err = "";
 
-$metrics;
+$metrics =[];
 if(Input::exists('post')) {
     if(Token::check(Input::get('token'))) {
         $metrics = Input::get('metrics');
