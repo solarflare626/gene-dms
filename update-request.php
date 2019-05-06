@@ -1,6 +1,5 @@
 <?php
-// Include config file
-require_once "db.php";
+;
 
 ### code starts here ###
 require_once 'core/init.php';

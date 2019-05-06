@@ -127,5 +127,15 @@ class Form  extends BaseModel{
         return true;
 
     }
+
+    public function requestForms($id =null){
+        if($id){
+            $this->find($id);
+        }
+
+        $form_id = $this->_data->id;
+
+        return (new RequestForm)->fetchAll(array('form_id','=', $form_id));
+    }
    
 }

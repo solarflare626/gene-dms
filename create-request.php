@@ -1,6 +1,4 @@
 <?php
-// Include config file
-require_once "db.php";
 
 ### code starts here ###
 require_once 'core/init.php';
@@ -52,6 +50,8 @@ if (Input::exists('post')) {
             }
         }
     }
+}else{
+    $forms = [];
 }
 ### code ends here ###
 ?>
@@ -120,7 +120,7 @@ if (Input::exists('post')) {
                                 <label>Forms:</label>
                                 <div class="forms-list">
                                     <?php
-                                        foreach (Input::get('forms') as $index => $value) {
+                                        foreach ($forms as $index => $value) {
                                             echo '<div class="entry input-group ">';
                                             echo '     <select class="form-control" name="forms[]" type="text"><option value="" disabled>Select Form</option>';
                                             

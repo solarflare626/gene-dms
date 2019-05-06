@@ -43,7 +43,8 @@
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet">
     <link href='https://fonts.googleapis.com/css?family=Muli:400,300' rel='stylesheet' type='text/css'>
     <link href="assets/css/themify-icons.css" rel="stylesheet">
-
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.css" rel="stylesheet">
+    
     
  </head>
 <body>
@@ -268,95 +269,39 @@
                             </div>
                             <div class="content">
                                 <div id="chartSubmitted" class="ct-chart"></div>
-                                <!-- <div class="footer">
-                                    <div class="chart-legend">
-                                        <i class="fa fa-circle text-info"></i> Open
-                                        <i class="fa fa-circle text-danger"></i> Click
-                                        <i class="fa fa-circle text-warning"></i> Click Second Time
-                                    </div>
-                                    <hr>
-                                    <div class="stats">
-                                        <i class="ti-reload"></i> Updated 3 minutes ago
-                                    </div>
-                                </div> -->
+                                
                             </div>
                         </div>
                     </div>
                 </div>
-                <!-- <div class="row">
+
+                <div class="row">
+
                     <div class="col-md-12">
                         <div class="card">
                             <div class="header">
-                                <h4 class="title">Users Behavior</h4>
-                                <p class="category">24 Hours performance</p>
+                                <h4 class="title">Submitted Forms</h4>
+                                <p class="category">per form</p>
                             </div>
-                            <div class="content">
-                                <div id="chartHours" class="ct-chart"></div>
-                                <div class="footer">
-                                    <div class="chart-legend">
-                                        <i class="fa fa-circle text-info"></i> Open
-                                        <i class="fa fa-circle text-danger"></i> Click
-                                        <i class="fa fa-circle text-warning"></i> Click Second Time
-                                    </div>
-                                    <hr>
-                                    <div class="stats">
-                                        <i class="ti-reload"></i> Updated 3 minutes ago
-                                    </div>
+                            <div class="content" >
+                                <label>Show <select id="form-stat-id">
+                                <?php
+                                    foreach ($forms as $key => $form) {
+                                        echo '<option value="'.$form->data()->id.'">'.$form->data()->id. ' --- '.$form->data()->name.'</option>';
+                                    }
+                                 
+                                 ?>
+                                </select> statistics</label>
+                    
+                                <div id="container" style="width: 100%;">
+                                    <canvas id="form-stats"></canvas>
                                 </div>
+                                
                             </div>
                         </div>
                     </div>
                 </div>
-				 -->
-                <!-- <div class="row">
-                    <div class="col-md-6">
-                        <div class="card">
-                            <div class="header">
-                                <h4 class="title">Email Statistics</h4>
-                                <p class="category">Last Campaign Performance</p>
-                            </div>
-                            <div class="content">
-                                <div id="chartPreferences" class="ct-chart ct-perfect-fourth"></div>
-
-                                <div class="footer">
-                                    <div class="chart-legend">
-                                        <i class="fa fa-circle text-info"></i> Open
-                                        <i class="fa fa-circle text-danger"></i> Bounce
-                                        <i class="fa fa-circle text-warning"></i> Unsubscribe
-                                    </div>
-                                    <hr>
-                                    <div class="stats">
-                                        <i class="ti-timer"></i> Campaign sent 2 days ago
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="card ">
-                            <div class="header">
-                                <h4 class="title">2015 Sales</h4>
-                                <p class="category">All products including Taxes</p>
-                            </div>
-                            <div class="content">
-                                <div id="chartActivity" class="ct-chart"></div>
-
-                                <div class="footer">
-                                    <div class="chart-legend">
-                                        <i class="fa fa-circle text-info"></i> Tesla Model S
-                                        <i class="fa fa-circle text-warning"></i> BMW 5 Series
-                                    </div>
-                                    <hr>
-                                    <div class="stats">
-                                        <i class="ti-check"></i> Data information certified
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div> -->
+                
             <footer class="footer">
                 <div class="container-fluid">
                     <nav class="pull-left">
@@ -392,6 +337,7 @@
 
 	<!-- Paper Dashboard DEMO methods, don't include it in your project! -->
 	<script src="assets/js/demo.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"></script>
 
     <script>
     $(document).ready(function(){
@@ -441,5 +387,50 @@
 
     	});
 	</script>
+
+    <script>
+            var updataFormStat = function(){
+                var e = document.getElementById("form-stat-id");
+                var form_id = e.options[e.selectedIndex].value;
+                var title = e.options[e.selectedIndex].text.split(" --- ")[1];
+
+                $.ajax({url: "form-stats.php?form="+form_id, success: function(result){
+                    console.log("form-stat",JSON.stringify(result));
+                    var ctx = document.getElementById('form-stats').getContext('2d');
+                    var myBar = new Chart(ctx, {
+                        type: 'bar',
+                        data: result,
+                        options: {
+                            responsive: true,
+                            legend: {
+                                position: 'top',
+                            },
+                            title: {
+                                display: true,
+                                text: title
+                            },
+                            scales: {
+                                yAxes: [{
+                                    ticks: {
+                                        beginAtZero: true
+                                    }
+                                }]
+                            }
+                        }
+                    });
+
+                    
+                }});
+
+                var divStat = $
+            };
+        	$(document).ready(function(){
+                updataFormStat();
+                $("#form-stat-id").change(function(){
+                    updataFormStat();
+                });
+            });
+
+    </script>
 
 </html>

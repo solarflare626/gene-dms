@@ -1,7 +1,5 @@
 <?php
-// Include config file
-require_once "db.php";
- 
+
 // Define variables and initialize with empty values
 $metric_name =  "";
 $metric_id = "";

@@ -73,7 +73,7 @@
     $user = new User();
     $profile = $user->data();
  }
-
+ $active_nav = "user";
  $token = Token::generate();
 
 $name = $profile->name;
@@ -121,7 +121,7 @@ $about_me = $profile->about_me;
 <div class="wrapper">
 
     <?php
-        if($user->is_admin())
+        if((new User)->is_admin())
             include 'includes/admin-sidebar.php'; 
         else
             include 'includes/entity-sidebar.php'; 
