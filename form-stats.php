@@ -2,7 +2,6 @@
  require_once 'core/init.php';
  include 'guards/authenticated.php';
 
- $users = (new User)->fetchAll("where id >1");
  $form = new Form(Input::get('form'));
  $metrics =  $form->metrics();
  $request_forms = $form->requestForms();
