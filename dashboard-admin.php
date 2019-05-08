@@ -181,7 +181,8 @@
                                         echo "<th>Form Name</th>";
 										echo "<th>Indicator</th>";
                                         echo "<th>Entity</th>";
-										echo "<th>Date</th>";
+                                        echo "<th>Year</th>";
+										echo "<th>Date Submitted</th>";
 										echo "<th>Action</th>";
                                     echo "</tr>";
                                 echo "</thead>";
@@ -196,7 +197,8 @@
                                         echo "<td>" . $form->data()->name . "</td>";
 										echo "<td>" . $indicator->data()->name . "</td>";
                                         echo "<td>" . $entity->data()->name. "</td>";
-										echo "<td>" . $value->data()->created_at. "</td>";
+                                        echo "<td>" . $value->data()->year. "</td>";
+										echo "<td>" . $value->data()->submitted_at. "</td>";
                                         echo "<td>";
                                             echo "<a class='btn btn-primary' href='submitted-form.php?id=".$value->data()->id."' title='View Submission' data-toggle='tooltip'> View </a>";
                                            

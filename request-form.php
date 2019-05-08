@@ -26,7 +26,8 @@ if(Input::exists('post')) {
 
         $request_form = new RequestForm($request_form_id);
         if(!$request_form->update(array(
-            'year' => Input::get('year')
+            'year' => Input::get('year'),
+            'submitted_at' => date('Y-m-d G:i:s')
         ))){
             die("error here");
         }
