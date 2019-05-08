@@ -53,7 +53,7 @@ if(Input::exists('post')) {
     
     $request_form = new RequestForm($request_form_id);
     $form = $request_form->form();
-
+    $entity = $request_form->user(); 
     $indicator = new Indicator($form->data()->indicator_id);
     $name = $form->data()->name;
     $indicator_id = $form->data()->indicator_id;
@@ -79,6 +79,8 @@ if(Input::exists('post')) {
     <title>Submitted Form</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.css">
     <script src="js/jquery-1.11.3.min.js"></script>
+    <script src="js/xlsx.full.min.js"></script>
+    <script src="js/FileSaver.min.js"></script>
     <style type="text/css">
         .wrapper{
             width: 500px;
@@ -96,6 +98,8 @@ if(Input::exists('post')) {
     </style>
     <!--   Core JS Files   -->
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" type="text/javascript"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.18/datatables.min.css"/>
+
 </body>
 </head>
 <body>
@@ -144,12 +148,58 @@ if(Input::exists('post')) {
                             <input type="hidden" name="id" value="<?php echo $request_form_id; ?>">
                             
                             <a href="dashboard-admin.php" class="btn btn-primary">Back</a>
+                            <a id="btnExport" class="btn btn-danger">Export</a>
                         </form>
                     
                 </div>
             </div>        
         </div>
     </div>
-    
 
+   
+    <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.18/datatables.min.js"></script>
+
+    <script>
+   
+               
+        $(document).ready(function(){
+           
+            var wb = XLSX.utils.book_new();
+            wb.SheetNames.push("<?php echo $form->data()->name ?>");
+
+
+            var ws_data = [
+                ["Form ID" , "<?php echo $form->data()->id?>","Entity" , "<?php echo  $entity->data()->name?>"],
+                ["" , "" , "" , ""],                
+                ["Form Name" , "<?php echo $form->data()->name?>","Year" , "<?php echo  $request_form->data()->year?>"],
+                ["" , "" , "" , ""],         
+                ["Metrics" , "Value" , "" , ""],
+                ["" , "" , "" , ""],                
+                <?php
+                    foreach ($metrics as $index => $value) {
+                       echo  '["'.$value.'" , "'.$answers[$index].'","" , ""],';
+                
+                    }
+                ?>
+                         
+            ];  //a row with 2 columns
+            var ws = XLSX.utils.aoa_to_sheet(ws_data);
+            
+            wb.Sheets["<?php echo $form->data()->name ?>"] = ws;
+            var wbout = XLSX.write(wb, {bookType:'xlsx',  type: 'binary'});
+            function s2ab(s) { 
+                var buf = new ArrayBuffer(s.length); //convert s to arrayBuffer
+                var view = new Uint8Array(buf);  //create uint8array as viewer
+                for (var i=0; i<s.length; i++) view[i] = s.charCodeAt(i) & 0xFF; //convert to octet
+                return buf;    
+            }
+
+            $("#btnExport").click(function(){
+                saveAs(new Blob([s2ab(wbout)],{type:"application/octet-stream"}), '<?php echo "".$request_form->data()->id."-".  $entity->data()->name ."-". $form->data()->name ?>.xlsx');
+            });
+        });
+
+
+    </script>
+<body>
 </html>
