@@ -303,7 +303,7 @@
                                    
                                  
                                  ?>
-                                </select>statistics</label>
+                                </select> statistics</label>
                     
                                 <div id="container" style="width: 100%;">
                                     <canvas id="form-stats"></canvas>
