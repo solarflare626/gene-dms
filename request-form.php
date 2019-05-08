@@ -25,6 +25,11 @@ if(Input::exists('post')) {
         ));
 
         $request_form = new RequestForm($request_form_id);
+        if(!$request_form->update(array(
+            'year' => Input::get('year')
+        ))){
+            die("error here");
+        }
         if($validate->passed()) {
             $ans = $request_form->answers();
             foreach ($ans as $index => $answer) {
@@ -117,6 +122,10 @@ if(Input::exists('post')) {
                             <div class="form-group">
                                 <label>Form Name</label>
                                 <input disabled  type="text" class="form-control" value="<?php echo $indicator->data()->name; ?>">
+                            </div>
+                            <div class="form-group">
+                                <label>Year</label>
+                                <input  type="number" required name="year" value="<?php if($request_form->data()->year != null)  echo  $request_form->data()->year; else echo date('Y'); ?>" class="form-control" >
                             </div>
                             
                             <div class="metrics form-group">

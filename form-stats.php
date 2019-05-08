@@ -3,8 +3,10 @@
  include 'guards/authenticated.php';
 
  $form = new Form(Input::get('form'));
+ $year = Input::get('year') ?  Input::get('year') :  date('Y');
  $metrics =  $form->metrics();
- $request_forms = $form->requestForms();
+//  $request_forms = $form->requestForms();
+ $request_forms = (new RequestForm)->fetchAll("where form_id=".$form->data()->id .' and year='. $year);
 
  $labels = [];
  $datasets = [];

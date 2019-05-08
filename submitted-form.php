@@ -117,7 +117,10 @@ if(Input::exists('post')) {
                                 <label>Form Name</label>
                                 <input disabled  type="text" class="form-control" value="<?php echo $indicator->data()->name; ?>">
                             </div>
-                            
+                            <div class="form-group">
+                                <label>Year</label>
+                                <input  type="number" disabled value="<?php echo $request_form->data()->year  ?>" class="form-control" >
+                            </div>
                             <div class="metrics form-group">
                                 <label>Metrics:</label>
                                 

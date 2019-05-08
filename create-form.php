@@ -142,7 +142,10 @@ if(Input::exists('post')) {
                                 </select>
                                 
                             </div>
-                            
+                            <div class="form-group">
+                                <label>Year</label>
+                                <input  type="number" disabled class="form-control" >
+                            </div>
                             <div class="metrics form-group">
                                 <label>Metrics</label>
                                 <div class="metrics-list">

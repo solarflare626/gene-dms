@@ -147,6 +147,7 @@ class InitDB{
                 `id` int(11) NOT NULL AUTO_INCREMENT,
                 `request_id` int(11),
                 `form_id` int(11),
+                `year` int(5),
                 `is_submitted` boolean DEFAULT 0,
                 `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
                 `deleted_at` datetime DEFAULT   NULL,

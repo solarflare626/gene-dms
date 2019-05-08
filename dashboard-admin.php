@@ -284,14 +284,26 @@
                                 <p class="category">per form</p>
                             </div>
                             <div class="content" >
-                                <label>Show <select id="form-stat-id">
+                                <label>Show Form <select id="form-stat-id">
                                 <?php
                                     foreach ($forms as $key => $form) {
                                         echo '<option value="'.$form->data()->id.'">'.$form->data()->id. ' --- '.$form->data()->name.'</option>';
                                     }
                                  
                                  ?>
-                                </select> statistics</label>
+                                </select> for Year <select id="form-stat-year">
+                                <?php
+                                   $range = 300;
+                                   $cur_year = (int) date("Y");
+                                   $end_year = $cur_year - $range;
+                                   for ($i=$cur_year; $i >= $end_year ; $i--) { 
+                                        echo '<option value="'.$i.'">'.$i.'</option>';
+                                   
+                                   }
+                                   
+                                 
+                                 ?>
+                                </select>statistics</label>
                     
                                 <div id="container" style="width: 100%;">
                                     <canvas id="form-stats"></canvas>
@@ -389,15 +401,20 @@
 	</script>
 
     <script>
+        
+        var myBar;
             var updataFormStat = function(){
                 var e = document.getElementById("form-stat-id");
+                var y = document.getElementById("form-stat-year");
                 var form_id = e.options[e.selectedIndex].value;
+                var year = y.options[y.selectedIndex].value;
+
                 var title = e.options[e.selectedIndex].text.split(" --- ")[1];
 
-                $.ajax({url: "form-stats.php?form="+form_id, success: function(result){
+                $.ajax({url: "form-stats.php?form="+form_id+"&year="+year, success: function(result){
                     console.log("form-stat",JSON.stringify(result));
                     var ctx = document.getElementById('form-stats').getContext('2d');
-                    var myBar = new Chart(ctx, {
+                    myBar = new Chart(ctx, {
                         type: 'bar',
                         data: result,
                         options: {
@@ -427,6 +444,11 @@
         	$(document).ready(function(){
                 updataFormStat();
                 $("#form-stat-id").change(function(){
+                    myBar.destroy();
+                    updataFormStat();
+                });
+                $("#form-stat-year").change(function(){
+                    myBar.destroy();
                     updataFormStat();
                 });
             });
