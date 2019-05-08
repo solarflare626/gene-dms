@@ -98,9 +98,7 @@ if(Input::exists('post')) {
     </style>
     <!--   Core JS Files   -->
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" type="text/javascript"></script>
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.18/datatables.min.css"/>
 
-</body>
 </head>
 <body>
     <div class="wrapper">
@@ -157,8 +155,7 @@ if(Input::exists('post')) {
     </div>
 
    
-    <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.18/datatables.min.js"></script>
-
+    
     <script>
    
                
@@ -201,5 +198,5 @@ if(Input::exists('post')) {
 
 
     </script>
-<body>
+</body>
 </html>

@@ -141,6 +141,8 @@
                                     echo "<a class='btn btn-primary' href='request-form.php?id=". $row->id ."' title='Update Request Form' data-toggle='tooltip'>Update</a>";
                                 
                                 }
+                                echo "<a class='btn btn-primary' href='export-form.php?id=". $row->id ."' title='Download Request Form to Excel' data-toggle='tooltip'>Download</a>";
+                                
                                 echo "</td>";
                                 echo "</tr>";
 
