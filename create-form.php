@@ -128,7 +128,7 @@ if(Input::exists('post')) {
                                 <input  type="text" name="name" class="form-control" value="<?php echo Input::get('name'); ?>">
                             </div>
                             <div class="form-group">
-                                <label>Form Name</label>
+                                <label>Indicator</label>
                                 <select required type="text" name="indicator_id" class="form-control">
                                 <option value="" disabled selected>Select Indicator</option>
                                 <?php
